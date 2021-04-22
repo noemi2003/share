@@ -1,52 +1,89 @@
 <template>
   <div>
-    <div class="left-padding">
-      <img class="logo" src="../assets/logo.png" />
-      <div class="flex icon-field" @click="$router.push('/home')">
-        <img class="icon" src="../assets/home.png" />
-        <p>ホーム</p>
-      </div>
-      <div class="flex icon-field" @click="$router.push('/profile')">
-        <img class="icon" src="../assets/profile.png" />
-        <p>プロフィール</p>
-      </div>
-      <div class="flex icon-field" @click="$store.dispatch('logout')">
-        <img class="icon" src="../assets/logout.png" />
-        <p>ログアウト</p>
+    <HeaderAuth />
+    <div class="card">
+      <p>新規登録</p>
+      <div class="form">
+        <input placeholder="ユーザーネーム" type="text" v-model="name" />
+        <input placeholder="プロフィール" type="text" v-model="profile" />
+        <input placeholder="メールアドレス" type="email" v-model="email" />
+        <input placeholder="パスワード" type="password" v-model="password" />
+        <button @click="auth">新規登録</button>
       </div>
     </div>
-    <ShareMessage />
   </div>
 </template>
 
 <script>
-import ShareMessage from "../components/ShareMessage";
+import HeaderAuth from "../components/HeaderAuth";
+import axios from "axios";
 export default {
+  data() {
+    return {
+      name: "",
+      profile: "",
+      email: "",
+      password: ""
+    };
+  },
   components: {
-    ShareMessage
+    HeaderAuth
+  },
+  methods: {
+    auth() {
+      axios
+        .post("herokuのURL/api/register", {
+          name: this.name,
+          profile: this.profile,
+          email: this.email,
+          password: this.password
+        })
+        .then(response => {
+          console.log(response);
+          this.$router.replace("/");
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
   }
 };
 </script>
 
 <style scoped>
-.left-padding {
-  margin: 20px;
-}
-.flex {
-  display: flex;
-}
-.logo {
+button {
   width: 100px;
-}
-.icon-field {
-  margin-top: 15px;
+  text-align: center;
+  padding: 8px 0 10px;
+  color: #fff;
+  background-color: #5419da;
+  border-radius: 25px;
   cursor: pointer;
 }
-.icon {
-  width: 25px;
+.card {
+  margin: 100px auto;
+  width: 350px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px;
 }
-.icon-field p {
-  font-size: 16px;
-  padding-left: 15px;
+.card p {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+}
+input {
+  margin-top: 15px;
+  width: 80%;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  color: black;
+}
+.form {
+  text-align: center;
+}
+.form button {
+  margin-top: 15px;
 }
 </style>
