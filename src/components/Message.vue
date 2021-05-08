@@ -85,7 +85,7 @@ export default {
     del(index) {
       axios
         .delete(
-          "herokuのURL/api/shares/" +
+          "https://floating-castle-12791.herokuapp.com/api/shares/" +
             this.shares[index].item.id
         )
         .then((response) => {
